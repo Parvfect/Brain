@@ -1,21 +1,3 @@
-"""
-https://be189.github.io/lessons/13/streaming_data_from_arduino.html
-"""
-
-import time
-
-import numpy as np
-import pandas as pd
-
-import serial
-import serial.tools.list_ports
-
-import bokeh.plotting
-import bokeh.io
-
-import matplotlib.pyplot as plt
-
-bokeh.io.output_notebook()
 
 
 HANDSHAKE = 0
@@ -83,14 +65,14 @@ def parse_raw(raw):
     return int(t), int(V) * 5 / 1023
 
 
-def daq_stream(arduino, n_data=100, delay=7 ):
+def daq_stream(arduino, n_data=100, delay=2):
     """Obtain `n_data` data points from an Arduino stream
     with a delay of `delay` milliseconds between each."""
     # Specify delay
     arduino.write(bytes([READ_DAQ_DELAY]) + (str(delay) + "x").encode())
 
     # Initialize output
-    time_ms = np.empty(n_data)  
+    time_ms = np.empty(n_data)
     voltage = np.empty(n_data)
 
     # Turn on the stream
@@ -103,8 +85,7 @@ def daq_stream(arduino, n_data=100, delay=7 ):
 
         try:
             t, V = parse_raw(raw)
-            time_ms[i] = t
-            voltage[i] = V
+            data_function(t,V)
             i += 1
         except:
             pass
@@ -115,16 +96,3 @@ def daq_stream(arduino, n_data=100, delay=7 ):
     return pd.DataFrame({'time': time_ms, 'voltage': voltage})
 
 
-port = find_arduino()
-arduino = serial.Serial(port, baudrate=115200)
-handshake_arduino(arduino, handshake_code=HANDSHAKE, print_handshake_message=True)
-
-df = daq_stream(arduino, n_data=1000, delay=20)
-
-df = df['voltage'].plot()
-plt.show()
-
-"""
-References -
-https://be189.github.io/lessons/13/streaming_data_from_arduino.html
-"""

@@ -86,3 +86,8 @@ void loop() {
     }
   }
 }
+
+"""
+References -
+https://be189.github.io/lessons/13/streaming_data_from_arduino.html
+"""
