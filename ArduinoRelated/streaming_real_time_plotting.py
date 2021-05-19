@@ -252,6 +252,13 @@ def parse_raw(raw):
 
     t, V = raw.rstrip().split(",")
 
+    # Basically we want an option of either a fourier transform or raw data here. 
+    # What would we need to do to have a real time ft here? It just needs to be called continuosly tbh
+    # but what would be the axes that change hmm, something to wonder about
+
+    """
+    Insert fourier transform integration over here
+    """
     return int(t), int(V) 
 
 
